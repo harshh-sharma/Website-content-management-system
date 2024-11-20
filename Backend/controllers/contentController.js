@@ -77,8 +77,42 @@ const getDomainSpecificContent = async (req,res) => {
   }
 }
 
+const updateDomainSpecificContent = async (req,res) => {
+  try {
+    const {contentId} = req.params;
+    console.log('contentId',contentId);
+    
+    const {title,content} = req.body;
+
+    const response = await Content.updateOne(
+      { _id: contentId },
+      { title, content }
+    );
+
+    if (response.matchedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Content not found with the provided ID',
+      });
+    }
+
+    return res.status(200).json({
+      success:true,
+      message:'Successfully content updated'
+    })
+
+
+  } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+}
+
 export {
   addContent,
   getAllContent,
-  getDomainSpecificContent
+  getDomainSpecificContent,
+  updateDomainSpecificContent
 };
