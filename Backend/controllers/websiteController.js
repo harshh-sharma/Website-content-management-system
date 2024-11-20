@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import { Content } from "../models/websiteContentModel.js";
 import { Website } from "../models/websiteModel.js";
 
 const registerWebsite = async (req, res) => {
@@ -50,7 +52,113 @@ const getAllWebsitesDomain = async (req,res) => {
   }
 }
 
+const getSpecificWebsiteAndThereContents = async (req,res) => {
+   try {
+    const {domainId} = req.params;
+
+    const response = await Website.findOne({_id:domainId});
+    if(!response){
+      return res.status(400).json({
+        success:false,
+        message: 'domain not found with the provided ID',
+      })
+    }
+
+    const contents = await Content.find({websiteId:domainId});
+    console.log('contents',contents);
+    
+
+    return res.status(200).json({
+      success:true,
+      message:'Successfully get domain details',
+      domain:response,
+      contents
+    })
+   } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message:error.message
+    })
+   }
+}
+
+const updateSpecificWebsiteDomainDetails = async (req,res) => {
+  try {
+    const {domainId} = req.params;
+    const {name,domain} = req.body;
+
+    if (domain) {
+      const existingDomain = await Website.findOne({ domain });
+
+      if (existingDomain && existingDomain._id.toString() !== domainId) {
+        return res.status(400).json({
+          success: false,
+          message: 'Domain is already in use by another website',
+        });
+      }
+    }
+    
+    const response = await Website.findByIdAndUpdate(
+      domainId,
+      {name,domain},
+      {new:true}
+    );
+
+    if (!response) {
+      return res.status(404).json({
+        success: false,
+        message: 'Website not found with the provided ID',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Website domain successfully updated',
+      updatedWebsite: response,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+} 
+
+const deleteWebsiteDomain = async (req,res) => {
+  try {
+    const { domainId } = req.params;
+
+    // Find the website to ensure it exists
+    const website = await Website.findById(domainId);
+    if (!website) {
+      return res.status(400).json({
+        success: false,
+        message: 'Website not found with the provided ID',
+      });
+    }
+
+    // Delete all content related to this website
+    await Content.deleteMany({ websiteId: domainId });
+
+    // Delete the website itself
+    await Website.findByIdAndDelete(domainId);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Website domain and associated content successfully deleted',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+}
+
 export {
   getAllWebsitesDomain,
-  registerWebsite
+  registerWebsite,
+  getSpecificWebsiteAndThereContents,
+  updateSpecificWebsiteDomainDetails,
+  deleteWebsiteDomain
 }

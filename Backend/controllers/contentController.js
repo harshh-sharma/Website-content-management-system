@@ -44,7 +44,7 @@ const getAllContent = async (req,res) => {
     })
   } catch (error) {
     return res.status(500).json({
-      success:false,
+      success:"fffff",
       message:error?.message
     })
   }
@@ -56,6 +56,8 @@ const getDomainSpecificContent = async (req,res) => {
     console.log('domainId',domainId);
     
     const domainRelatedContent = await Content.findOne({websiteId:domainId});
+    console.log("domainRelatedContent",domainRelatedContent);
+    
     if(!domainRelatedContent){
       return res.status(400).json({
         success:false,
@@ -110,9 +112,36 @@ const updateDomainSpecificContent = async (req,res) => {
   }
 }
 
+const deleteSpecificContent = async (req,res) => {
+  try {
+    const {contentId} = req.params;
+    
+    const response = await Content.findByIdAndDelete({_id:contentId});
+    
+    if (!response) {
+      return res.status(404).json({
+        success: false,
+        message: 'Content not found with the provided ID',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Content deleted successfully',
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message:error.message
+    })
+  }
+}
+
 export {
   addContent,
   getAllContent,
   getDomainSpecificContent,
-  updateDomainSpecificContent
+  updateDomainSpecificContent,
+  deleteSpecificContent
 };
