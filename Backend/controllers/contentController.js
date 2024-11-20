@@ -55,7 +55,7 @@ const getDomainSpecificContent = async (req,res) => {
     const {domainId} = req.params;
     console.log('domainId',domainId);
     
-    const domainRelatedContent = await Content.findById({websiteId:domainId});
+    const domainRelatedContent = await Content.findOne({websiteId:domainId});
     if(!domainRelatedContent){
       return res.status(400).json({
         success:false,
