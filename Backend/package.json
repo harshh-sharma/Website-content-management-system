@@ -1,7 +1,7 @@
 {
-  "name": "cms_backend",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "This is cms backend",
+  "description": "This is a backend of cmd",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -11,7 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

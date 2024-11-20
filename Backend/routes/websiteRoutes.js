@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { registerWebsite } from "../controller/websiteController.js";
+import  { getAllWebsitesDomain,registerWebsite } from "../controllers/websiteController.js";
 import isAuthenticated from "../middleware/authMiddleware.js";
 
 const websiteRouter = Router();
 
-websiteRouter.post('/add',isAuthenticated,registerWebsite);
+websiteRouter.route('/').get(isAuthenticated,getAllWebsitesDomain)
+                        .post(isAuthenticated,registerWebsite);
 
 export default websiteRouter;

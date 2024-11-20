@@ -42,4 +42,4 @@ const contentSchema = new mongoose.Schema(
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
 
-module.exports = mongoose.model('Content', contentSchema);
+export const Content  = mongoose.model('Content', contentSchema);

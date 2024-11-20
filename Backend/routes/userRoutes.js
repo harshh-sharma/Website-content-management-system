@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {register,login,logout,getUserProfile,updateUser} from "../controller/userController.js";
+import {register,login,logout,getUserProfile,updateUser} from "../controllers/userController.js";
 
 import isAuthenticated from "../middleware/authMiddleware.js";
 

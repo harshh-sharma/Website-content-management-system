@@ -1,3 +1,5 @@
+import { Website } from "../models/websiteModel.js";
+
 const registerWebsite = async (req, res) => {
     try {
       const { name, domain } = req.body;
@@ -31,6 +33,24 @@ const registerWebsite = async (req, res) => {
     }
   };
 
+
+const getAllWebsitesDomain = async (req,res) => {
+  try {
+    const response = await Website.find({});
+    return res.status(200).json({
+      success:true,
+      message:"All website domains",
+      websiteDomain:response
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success:false,
+      message:"Server Error"
+    })
+  }
+}
+
 export {
-    registerWebsite
+  getAllWebsitesDomain,
+  registerWebsite
 }

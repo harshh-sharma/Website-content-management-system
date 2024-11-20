@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import userRouter from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
+import websiteRouter from "./routes/websiteRoutes.js";
+import contentRouter from "./routes/contentRoutes.js";
 
 
 const app = express();
@@ -21,6 +23,8 @@ app.get("/",(req,res) => {
 });
 
 app.use("/api/v1/user",userRouter);
+app.use("/api/v1/domain",websiteRouter);
+app.use("/api/v1/domain/content",contentRouter);
 
 app.all("*",(req,res) => {
     res.status(404).send("404 OOPS!! Page not found");
