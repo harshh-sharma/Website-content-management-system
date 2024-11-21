@@ -4,6 +4,9 @@ const addContent = async (req, res) => {
   try {
     const { websiteId, type, title, content, metadata } = req.body;
 
+    console.log('websiteId, type, title, content',websiteId, type, title, content);
+    
+
     if(!type || !title || !content){
        return res.status(400).json({
         success:false,
@@ -19,7 +22,19 @@ const addContent = async (req, res) => {
       metadata,
     });
 
+    if (req.file) {
+      console.log("req", req.file);
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {})
+      console.log("res", result);
+      if (result) {
+          newContent.contentImage.public_id = result.public_id;
+          newContent.contentImage.secure_url = result.secure_url;
+      }
+    }
+
+
     await newContent.save();
+
     res.status(201).json({ message: 'Content added successfully', content: newContent });
   } catch (error) {
     console.error(error);
