@@ -34,13 +34,28 @@ export const updateDomain = createAsyncThunk("/domain/domainId",async ({domainId
   }
 })
 
-export const createDomain = createAsyncThunk('/domain',async(data) => {
+export const addWebsite = createAsyncThunk('/domain',async(data) => {
   try {
     const response = axiosInstance.post('/domain',data);
     toast.promise(response,{
       loading:"wait,domain creation started",
       success:"domain successfully created",
       error:"failed to create domain"
+    })
+    return (await response).data;
+  } catch (error) {
+    console.log(error);
+    toast.error(error?.response?.data);
+  }
+})
+
+export const deleteWebsite = createAsyncThunk('/domain/domainId',async(domainId) => {
+  try {
+    const response = axiosInstance.delete(`/domain/${domainId}`);
+    toast.promise(response,{
+      loading:"wait,domain deletion started",
+      success:"domain successfully deleted",
+      error:"failed to delete domain"
     })
     return (await response).data;
   } catch (error) {

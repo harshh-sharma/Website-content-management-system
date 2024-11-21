@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { getAllDomains, updateDomain } from "../store/slices/domainSlice"
+import { deleteWebsite, getAllDomains, updateDomain } from "../store/slices/domainSlice";
 
 const Card = ({ websiteName, domain, domainId }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -9,30 +9,27 @@ const Card = ({ websiteName, domain, domainId }) => {
   const [newDomain, setNewDomain] = useState(domain);
   const dispatch = useDispatch();
 
-  const handleEditValidation = (name,domain) => {
-    if(newWebsiteName?.length == 0){
-        return false;
+  const handleEditValidation = (name, domain) => {
+    if (newWebsiteName?.length === 0) {
+      return false;
     }
-
-    if(newDomain?.length == 0){
-        return false;
+    if (newDomain?.length === 0) {
+      return false;
     }
-
     return true;
-  }
+  };
 
   const handleSave = async (e) => {
-    e.stopPropagation(); 
-    if(handleEditValidation(newWebsiteName,newDomain)){
-        const data = {
-            name:newWebsiteName,
-            domain:newDomain
-        }
-        await dispatch(updateDomain({ domainId, data }));
-        await dispatch(getAllDomains());
-
+    e.stopPropagation();
+    if (handleEditValidation(newWebsiteName, newDomain)) {
+      const data = {
+        name: newWebsiteName,
+        domain: newDomain,
+      };
+      await dispatch(updateDomain({ domainId, data }));
+      await dispatch(getAllDomains());
     }
-    setIsEditing(false); 
+    setIsEditing(false);
   };
 
   const handleEditClick = (e) => {
@@ -45,11 +42,39 @@ const Card = ({ websiteName, domain, domainId }) => {
     setIsEditing(false);
   };
 
+  const handleDeleteClick = async (e) => {
+    e.stopPropagation();
+    await dispatch(deleteWebsite(domainId));
+    await dispatch(getAllDomains());
+  };
+
   return (
     <div
-      className="bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-300 cursor-pointer h-[200px] w-[300px]"
+      className="relative bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-300 cursor-pointer h-[200px] w-[300px]"
       onClick={(e) => e.stopPropagation()}
     >
+      {/* Cross Button */}
+      <button
+        onClick={handleDeleteClick}
+        className="absolute top-2 right-2 bg-transparent text-white p-2 rounded-full hover:bg-red-700 flex items-center justify-center"
+        title="Delete"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-4 h-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
       {!isEditing ? (
         <Link href={`/domain/${domainId}/content`} passHref>
           <div className="mb-4">
@@ -62,9 +87,7 @@ const Card = ({ websiteName, domain, domainId }) => {
           </div>
         </Link>
       ) : (
-        // Editable Mode
         <div>
-          {/* Editable Fields */}
           <input
             type="text"
             value={newWebsiteName}

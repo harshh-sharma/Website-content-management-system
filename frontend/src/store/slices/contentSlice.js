@@ -18,6 +18,23 @@ export const getAllContentsRelatedToDomain = createAsyncThunk("/domain/content/"
   }
 })
 
+export const addContent = createAsyncThunk("/domain/content/domainId",async(formData) => {
+    try {
+        const response = axiosInstance.post(`/domain/content/`,formData);
+        toast.promise(res,{
+            loading:"Wait !! Content",
+            success:(data) => {
+                // console.log("dat",data);
+                return data?.data?.message;
+            },
+            error:"Failed to add content"
+        })
+        return (await res).data
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
 const contentSlice = createSlice({
     name:"contents",
     initialState:{

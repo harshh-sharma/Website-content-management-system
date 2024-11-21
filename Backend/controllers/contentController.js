@@ -1,4 +1,5 @@
-import {Content} from "../models/websiteContentModel.js"
+import {Content} from "../models/websiteContentModel.js";
+import cloudinary from "cloudinary";
 
 const addContent = async (req, res) => {
   try {

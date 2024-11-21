@@ -1,5 +1,8 @@
 'use client'
+import { addWebsite } from "../../../store/slices/domainSlice";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const Page = () => {
   const [formData, setFormData] = useState({
@@ -7,15 +10,26 @@ const Page = () => {
     domain: "",
   });
 
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const vallidateData = () => {
+    if(formData?.name?.length == 0) return false;
+    if(formData?.domain?.length == 0) return false;
+    return true;
+  }
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    // Add your form submission logic here
+    if(vallidateData()){
+        await dispatch(addWebsite(formData));
+        router.push('/websites');
+    }
   };
 
   return (
