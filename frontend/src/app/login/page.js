@@ -1,13 +1,44 @@
 'use client';
+import { login } from "@/store/slices/authSlice";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const formValidation = (email,password) => {
+    if(!email || !password ){
+        toast.error("Please,fill all the details");
+        return false;
+    }
+
+    if(!email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+)){
+    toast.error("Invalid email");
+    return false;
+}
+if(password.length < 8){
+    toast.error("Password must be contain 8 character");
+    return false;
+}
+return true;
+}
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
+   if(formValidation(email,password)){
+    const response = await dispatch(login({email,password}));
+            if(response?.payload?.success){
+                setLoginData({
+                    email:"",
+                    password:""
+                })
+            }
+   }
+
   };
 
   return (

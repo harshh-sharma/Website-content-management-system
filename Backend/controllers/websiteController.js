@@ -87,6 +87,11 @@ const updateSpecificWebsiteDomainDetails = async (req,res) => {
     const {domainId} = req.params;
     const {name,domain} = req.body;
 
+    console.log("domainId",domainId);
+    console.log("namename",name,domain);
+    
+    
+
     if (domain) {
       const existingDomain = await Website.findOne({ domain });
 

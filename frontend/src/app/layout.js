@@ -3,7 +3,7 @@
 import { Provider } from "react-redux";
 import Navbar from "../components/Navbar";
 import './globals.css';
-import appStore from "@/store/store";
+import appStore from "../store/store"
 
 export default function RootLayout({ children }) {
   return (

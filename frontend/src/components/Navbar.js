@@ -1,10 +1,12 @@
 "use client";
 
+import { logout } from "../store/slices/authSlice";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
-  
+  const router = useRouter();
   const dispatch = useDispatch();
 
   // for checking user is logged in or not
@@ -14,13 +16,16 @@ export default function Navbar() {
   // for checking the role of the user
   const userRole = useSelector(store => store?.auth?.role);
 
-  // const handleLogout = (e) => {
-  //     e.preventDefault();
-  //     const res = dispatch(logout());
-  //     if (res?.payload?.success) {
-  //         navigate("/");
-  //     }
-  // }
+  const handleLogout = async(e) => {
+      e.preventDefault();
+      const res = dispatch(logout());
+      console.log('res',await res);
+      router.push("/");
+      
+      if (res?.payload?.success) {
+          router.push("/");
+      }
+  }
 
 
   return (
@@ -41,37 +46,41 @@ export default function Navbar() {
               Home
             </Link>
           </li>
-          <li>
+          {isUserLoggedIn && <>
+            <li>
             <Link
-              href="/dashboard"
+              href="/websites"
               className="hover:text-purple-400 transition duration-300"
             >
-              Dashboard
+              Websites
             </Link>
+           
           </li>
           <li>
-            {isUserLoggedIn ? <Link
-              href="/login"
-              className="hover:text-teal-400 transition duration-300"
+          <Link
+              href="/create/domain"
+              className="hover:text-purple-400 transition duration-300"
             >
-              Logout
-            </Link> :<Link
-              href="/login"
-              className="hover:text-teal-400 transition duration-300"
-            >
-              Login
-            </Link>}
+              Add Website
+            </Link>
           </li>
+          </>}
         </ul>
 
         {/* Call to Action */}
         <div>
-          <Link
-            href="/signup"
+          {isUserLoggedIn ? <button
+            onClick={handleLogout}
             className="bg-gradient-to-r from-indigo-500 to-purple-500 text-gray-900 px-4 py-2 rounded-md font-semibold hover:from-purple-500 hover:to-indigo-500 transition duration-300"
           >
-            Get Started
-          </Link>
+            Logout
+          </button> :
+          <Link
+            href="/login"
+            className="bg-gradient-to-r from-indigo-500 to-purple-500 text-gray-900 px-4 py-2 rounded-md font-semibold hover:from-purple-500 hover:to-indigo-500 transition duration-300"
+          >
+            Login
+          </Link>}
         </div>
       </div>
     </nav>
