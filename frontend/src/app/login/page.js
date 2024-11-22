@@ -1,9 +1,12 @@
 'use client';
+import { useRouter } from "next/navigation";
 import { login } from "../../store/slices/authSlice";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
 export default function Login() {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -32,10 +35,9 @@ return true;
    if(formValidation(email,password)){
     const response = await dispatch(login({email,password}));
             if(response?.payload?.success){
-                setLoginData({
-                    email:"",
-                    password:""
-                })
+                setEmail('');
+                setPassword('');
+                router.push('/');
             }
    }
 

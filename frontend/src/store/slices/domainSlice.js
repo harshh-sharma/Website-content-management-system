@@ -1,7 +1,6 @@
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../helpers/axiosInstance";
-import assert from "assert";
 
 export const getAllDomains = createAsyncThunk("/domain/",async () => {
   try {

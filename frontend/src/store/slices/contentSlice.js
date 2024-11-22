@@ -21,7 +21,7 @@ export const getAllContentsRelatedToDomain = createAsyncThunk("/domain/content/"
 export const addContent = createAsyncThunk("/domain/content/domainId",async(formData) => {
     try {
         const response = axiosInstance.post(`/domain/content/`,formData);
-        toast.promise(res,{
+        toast.promise(response,{
             loading:"Wait !! Content",
             success:(data) => {
                 // console.log("dat",data);
@@ -29,7 +29,23 @@ export const addContent = createAsyncThunk("/domain/content/domainId",async(form
             },
             error:"Failed to add content"
         })
-        return (await res).data
+        return (await response).data
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+export const deleteContent = createAsyncThunk('domain/content/contentId',async (contentId) => {
+    try {
+        const response = axiosInstance.delete(`/domain/content/${contentId}`);
+        toast.promise(response,{
+            loading:"Wait !! deleting content",
+            success:(data) => {
+                // console.log("dat",data);
+                return data?.data?.message;
+            },
+            error:"Failed to delete content"
+        })
     } catch (error) {
         toast.error(error?.response?.data?.message);
     }

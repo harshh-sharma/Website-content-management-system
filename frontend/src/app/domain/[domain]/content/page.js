@@ -93,6 +93,8 @@ function Contents() {
               content={item?.content}
               title={item?.title}
               image={item?.contentImage?.secure_url}
+              contentId={item?._id}
+              domainId={domain}
             />
           ))
         ) : (
