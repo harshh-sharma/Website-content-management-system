@@ -101,11 +101,16 @@ const updateDomainSpecificContent = async (req,res) => {
     console.log('contentId',contentId);
     
     const {title,content} = req.body;
+    console.log("title-content",title,content);
+    
 
     const response = await Content.updateOne(
       { _id: contentId },
       { title, content }
     );
+
+    console.log("reponseOfUpdatingcontent",response);
+    
 
     if (response.matchedCount === 0) {
       return res.status(404).json({

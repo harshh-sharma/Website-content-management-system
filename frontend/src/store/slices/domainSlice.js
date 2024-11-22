@@ -38,13 +38,15 @@ export const addWebsite = createAsyncThunk('/domain',async(data) => {
     const response = axiosInstance.post('/domain',data);
     toast.promise(response,{
       loading:"wait,domain creation started",
-      success:"domain successfully created",
+      success:(data) => {
+        return data?.data?.message;
+    },
       error:"failed to create domain"
     })
     return (await response).data;
   } catch (error) {
-    console.log(error);
-    toast.error(error?.response?.data);
+    console.log(error?.response?.data);
+    toast.error(error?.response?.data?.message);
   }
 })
 

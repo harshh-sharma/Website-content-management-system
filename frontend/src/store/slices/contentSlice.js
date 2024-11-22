@@ -22,7 +22,7 @@ export const addContent = createAsyncThunk("/domain/content/domainId",async(form
     try {
         const response = axiosInstance.post(`/domain/content/`,formData);
         toast.promise(response,{
-            loading:"Wait !! Content",
+            loading:"Wait !! while add content",
             success:(data) => {
                 // console.log("dat",data);
                 return data?.data?.message;
@@ -45,6 +45,22 @@ export const deleteContent = createAsyncThunk('domain/content/contentId',async (
                 return data?.data?.message;
             },
             error:"Failed to delete content"
+        })
+    } catch (error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
+
+
+export const updateContent = createAsyncThunk('/domain/content/contentId',async({contentId,editContentData}) => {
+    try {
+        const response = axiosInstance.put(`/domain/content/${contentId}`,editContentData);
+        toast.promise(response,{
+            loading:"Wait !! while updating content",
+            success:(data) => {
+                return data?.data?.message;
+            },
+            error:"Failed to update content"
         })
     } catch (error) {
         toast.error(error?.response?.data?.message);

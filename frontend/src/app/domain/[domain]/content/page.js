@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContent, getAllContentsRelatedToDomain } from '../../../../store/slices/contentSlice';
+import { addContent, getAllContentsRelatedToDomain, updateContent } from '../../../../store/slices/contentSlice';
 import Card from '../../../../components/ContentCard';
+import toast from 'react-hot-toast';
 
 function Contents() {
   const { domain } = useParams();
@@ -82,6 +83,39 @@ function Contents() {
     }
   };
 
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [editContentData, setEditContentData] = useState({
+  title: "",
+  content: "",
+  image: "",
+  contentId: "",
+});
+
+const handleEditClick = (contentData) => {
+  setEditContentData(contentData); // Pre-fill the content data in the modal
+  setIsEditModalOpen(true); // Open the modal
+};
+
+const handleEditFormSubmit = async (e,contentId) => {
+  e.preventDefault();
+  console.log("editcontData",editContentData);
+  if(editContentData?.title?.length == 0){
+    toast.error('Title not be empty');
+    return;
+  }
+  if(editContentData?.content?.length == 0){
+    toast.error('Content not be empty');
+    return;
+  }
+  
+ const response = await dispatch(updateContent({contentId,editContentData}));
+ console.log("updatingResponse",response);
+ await dispatch(getAllContentsRelatedToDomain(domain));
+ setIsEditModalOpen(!isEditModalOpen);
+}
+
+
   return (
     <div className="relative flex flex-col gap-5 p-6 min-h-screen bg-gray-900 text-white">
       {/* Content List */}
@@ -95,6 +129,7 @@ function Contents() {
               image={item?.contentImage?.secure_url}
               contentId={item?._id}
               domainId={domain}
+              onEditClick={(contentData) => handleEditClick(contentData)} // Pass handler
             />
           ))
         ) : (
@@ -109,6 +144,91 @@ function Contents() {
       >
         <span className="text-2xl font-bold">+</span>
       </button>
+
+      {isEditModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="bg-gray-800 text-white p-6 rounded-md shadow-lg w-[400px]">
+      <h2 className="text-lg font-semibold mb-4">Edit Content</h2>
+      <form
+        onSubmit={(e) => handleEditFormSubmit(e, editContentData.contentId)}
+        className="flex flex-col gap-4"
+      >
+        {/* Image Input */}
+        <div>
+          <label className="block text-sm font-medium mb-1">Image</label>
+          {editContentData.image ? (
+            <img
+              src={editContentData.image}
+              alt="Preview"
+              className="w-full h-[150px] rounded mb-2"
+            />
+          ) : (
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png,.svg"
+              onChange={(e) =>
+                setEditContentData({
+                  ...editContentData,
+                  image: e.target.files[0],
+                })
+              }
+              className="w-full p-2 bg-gray-900 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          )}
+        </div>
+
+        {/* Title Input */}
+        <div>
+          <label className="block text-sm font-medium mb-1">Title</label>
+          <input
+            type="text"
+            value={editContentData.title}
+            onChange={(e) =>
+              setEditContentData({ ...editContentData, title: e.target.value })
+            }
+            className="w-full p-2 bg-gray-900 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Enter title"
+          />
+        </div>
+
+        {/* Content Input */}
+        <div>
+          <label className="block text-sm font-medium mb-1">Content</label>
+          <textarea
+            value={editContentData.content}
+            onChange={(e) =>
+              setEditContentData({
+                ...editContentData,
+                content: e.target.value,
+              })
+            }
+            className="w-full p-2 bg-gray-900 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            rows="4"
+            placeholder="Enter content"
+          ></textarea>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-between">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          >
+            Save Changes
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsEditModalOpen(false)}
+            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
       {/* Modal for Adding Content */}
       {isModalOpen && (
