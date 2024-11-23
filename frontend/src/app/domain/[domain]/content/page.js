@@ -1,13 +1,19 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContent, getAllContentsRelatedToDomain, updateContent } from '../../../../store/slices/contentSlice';
 import Card from '../../../../components/ContentCard';
 import toast from 'react-hot-toast';
 
 function Contents() {
+
+  const [isSubmitting,setIsSubmitting] = useState(false);
+
+  const isUserLoggedIn = useSelector(store => store?.auth?.isLoggedIn);
+const router = useRouter();
+
   const { domain } = useParams();
   const dispatch = useDispatch();
 
@@ -27,7 +33,7 @@ function Contents() {
   };
 
   useEffect(() => {
-    loadContents();
+    if(isUserLoggedIn) loadContents();
   }, []);
 
   const handleAddContent = () => {
@@ -67,6 +73,7 @@ function Contents() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const { title, content, image } = contentData;
 
     if (formValidation(title, content)) {
@@ -80,6 +87,7 @@ function Contents() {
       await dispatch(addContent(formData));
       loadContents();
       handleModalClose();
+      setIsSubmitting(false);
     }
   };
 
@@ -113,6 +121,12 @@ const handleEditFormSubmit = async (e,contentId) => {
  console.log("updatingResponse",response);
  await dispatch(getAllContentsRelatedToDomain(domain));
  setIsEditModalOpen(!isEditModalOpen);
+}
+
+
+
+if(!isUserLoggedIn){
+  router.push('/login');
 }
 
 
@@ -277,19 +291,19 @@ const handleEditFormSubmit = async (e,contentId) => {
 
               {/* Buttons */}
               <div className="flex justify-between">
-                <button
+                {!isSubmitting && <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 >
                   Submit
-                </button>
-                <button
+                </button>}
+                {!isSubmitting && <button
                   type="button"
                   onClick={handleModalClose}
                   className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
                 >
                   Cancel
-                </button>
+                </button>}
               </div>
             </form>
           </div>

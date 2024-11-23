@@ -4,11 +4,14 @@ import { useRouter } from "next/navigation";
 import { login } from "../../store/slices/authSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const isUserLoggedIn = useSelector(store => store?.auth?.isLoggedIn);
+  
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +46,10 @@ return true;
    }
 
   };
+
+  if(isUserLoggedIn){
+    router.push('/');
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
