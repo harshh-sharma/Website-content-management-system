@@ -1,4 +1,5 @@
-'use client'
+"use client";
+
 import { addWebsite } from "../../../store/slices/domainSlice";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -32,6 +33,7 @@ const Page = () => {
     }
   };
 
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-[400px]">

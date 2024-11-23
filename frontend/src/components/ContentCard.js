@@ -1,8 +1,9 @@
+"use client";
 import { useDispatch } from "react-redux";
 import { deleteContent, getAllContentsRelatedToDomain } from "../store/slices/contentSlice";
 import { CiEdit } from "react-icons/ci";
 
-const Card = ({ title, image, content, contentId, domain, onEditClick }) => {
+const Card = ({ title, image, content, contentId, domainId, onEditClick }) => {
   const dispatch = useDispatch();
 
   const dummyImage =
@@ -11,7 +12,7 @@ const Card = ({ title, image, content, contentId, domain, onEditClick }) => {
   const handleDeleteClick = async (e) => {
     e.stopPropagation(); // Prevent event bubbling
     await dispatch(deleteContent(contentId));
-    await dispatch(getAllContentsRelatedToDomain(domain)); // Refetch updated content
+    await dispatch(getAllContentsRelatedToDomain(domainId)); // Refetch updated content
   };
 
   const handleEditClick = (e) => {

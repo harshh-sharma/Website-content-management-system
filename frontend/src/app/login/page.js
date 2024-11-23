@@ -1,4 +1,5 @@
-'use client';
+"use client";
+
 import { useRouter } from "next/navigation";
 import { login } from "../../store/slices/authSlice";
 import { useState } from "react";
@@ -82,12 +83,12 @@ return true;
         >
           Login
         </button>
-        <p className="mt-4 text-center text-sm text-gray-400">
+        {/* <p className="mt-4 text-center text-sm text-gray-400">
           Don't have an account?{" "}
           <a href="/signup" className="text-indigo-400 hover:underline">
             Sign up
           </a>
-        </p>
+        </p> */}
       </form>
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center justify-center p-6">
@@ -15,7 +17,7 @@ export default function Home() {
         <div className="bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-300">
           <h2 className="text-xl font-bold mb-2 text-indigo-400">Manage Content</h2>
           <p className="text-gray-400">
-            Create, update, and organize your website's content effortlessly.
+            Create, update, and organize your website&apos;s content effortlessly.
           </p>
         </div>
 
@@ -23,7 +25,7 @@ export default function Home() {
         <div className="bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-300">
           <h2 className="text-xl font-bold mb-2 text-purple-400">Analytics</h2>
           <p className="text-gray-400">
-            Gain insights into your website's performance and audience.
+            Gain insights into your website&apos;s performance and audience.
           </p>
         </div>
 
@@ -31,7 +33,7 @@ export default function Home() {
         <div className="bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-300">
           <h2 className="text-xl font-bold mb-2 text-teal-400">Custom Themes</h2>
           <p className="text-gray-400">
-            Personalize your website's look and feel with ease.
+            Personalize your website&apos;s look and feel with ease.
           </p>
         </div>
       </div>

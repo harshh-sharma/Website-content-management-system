@@ -5,11 +5,11 @@ import upload from "../middleware/multerMiddleware.js";
 
 const contentRouter = Router();
 
-contentRouter.route('/').get(isAuthenticated,getAllContent)
-                        .post(isAuthenticated,upload.single("image"),addContent);
+contentRouter.route('/').get(getAllContent)
+                        .post(upload.single("image"),addContent);
 
-contentRouter.route('/:domainId').get(isAuthenticated,getDomainSpecificContent);
+contentRouter.route('/:domainId').get(getDomainSpecificContent);
 
-contentRouter.route('/:contentId').put(isAuthenticated,updateDomainSpecificContent)
-                                  .delete(isAuthenticated,deleteSpecificContent)
+contentRouter.route('/:contentId').put(updateDomainSpecificContent)
+                                  .delete(deleteSpecificContent)
 export default contentRouter;

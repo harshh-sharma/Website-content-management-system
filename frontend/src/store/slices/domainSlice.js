@@ -1,3 +1,5 @@
+"use client";
+
 import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../helpers/axiosInstance";

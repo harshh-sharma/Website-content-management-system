@@ -1,3 +1,4 @@
+"use client";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import axiosInstance from "../../helpers/axiosInstance"
@@ -21,6 +22,7 @@ export const login = createAsyncThunk("/auth/login",async(data) => {
 
 export const logout = createAsyncThunk("/auth/logout",async() => {
    try {
+    return
      const res = axiosInstance.get("user/logout");
      toast.promise(res,{
          loading:"wait !! logged out",
@@ -66,41 +68,44 @@ export const getUserProfile = createAsyncThunk("/auth/profile",async() => {
 })
 
 
+const isBrowser = typeof window !== 'undefined';
+
 const authSlice = createSlice({
-    name:"auth",
-    initialState:{
-        isLoggedIn: localStorage.getItem("isLoggedIn") || false,
-        role: localStorage.getItem("role") == "undefined" ? "" : JSON.parse(localStorage.getItem("role")),
-        data: localStorage.getItem("data") == 'undefined' ? {} : JSON.parse(localStorage.getItem("data")),
+    name: "auth",
+    initialState: {
+        isLoggedIn: isBrowser ? localStorage.getItem("isLoggedIn") || false : false,
+        role: isBrowser ? (localStorage.getItem("role") === "undefined" ? "" : JSON.parse(localStorage.getItem("role"))) : "",
+        data: isBrowser ? (localStorage.getItem("data") === "undefined" ? {} : JSON.parse(localStorage.getItem("data"))) : {},
     },
-    reducers:{
-        // setPageName: (state, newName) => {
-        //     state.pageName = newName
-        // }
-    },
-    extraReducers:(builder) => {
+    reducers: {},
+    extraReducers: (builder) => {
         builder
-        .addCase(login.fulfilled,(state,action) => {
-            localStorage.setItem("data",JSON.stringify(action?.payload?.user));
-            localStorage.setItem("isLoggedIn",true);
-            localStorage.setItem("role",JSON.stringify(action?.payload?.user?.role));
-            state.isLoggedIn = true,
+        .addCase(login.fulfilled, (state, action) => {
+            if (isBrowser) {
+                localStorage.setItem("data", JSON.stringify(action?.payload?.user));
+                localStorage.setItem("isLoggedIn", true);
+                localStorage.setItem("role", JSON.stringify(action?.payload?.user?.role));
+            }
+            state.isLoggedIn = true;
             state.data = JSON.parse(JSON.stringify(action?.payload?.user));
-            state.isLoggedIn = true,
             state.role = JSON.parse(JSON.stringify(action?.payload?.user?.role));
         })
-        .addCase(logout.fulfilled,(state,action) => {
+        .addCase(logout.fulfilled, (state, action) => {
+            if (isBrowser) {
+                localStorage.clear();
+            }
             state.data = {};
-            state.isLoggedIn = false,
-            state.role = ""
-            localStorage.clear();
+            state.isLoggedIn = false;
+            state.role = "";
         })
-        .addCase(getUserProfile.fulfilled,(state,action) => {
-            localStorage.setItem("data",JSON.stringify(action?.payload?.data));
+        .addCase(getUserProfile.fulfilled, (state, action) => {
+            if (isBrowser) {
+                localStorage.setItem("data", JSON.stringify(action?.payload?.data));
+            }
             state.data = JSON.parse(JSON.stringify(action?.payload?.data));
         })
     }
-})
+});
 
 
 // export const {} = authSlice.actions;

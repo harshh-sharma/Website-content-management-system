@@ -4,12 +4,12 @@ import isAuthenticated from "../middleware/authMiddleware.js";
 
 const websiteRouter = Router();
 
-websiteRouter.route('/').get(isAuthenticated,getAllWebsitesDomain)
-                        .post(isAuthenticated,registerWebsite);
+websiteRouter.route('/').get(getAllWebsitesDomain)
+                        .post(registerWebsite);
                        
-websiteRouter.route('/:domainId').put(isAuthenticated,updateSpecificWebsiteDomainDetails)
-                                .get(isAuthenticated,getSpecificWebsiteAndThereContents)
-                                .delete(isAuthenticated,deleteWebsiteDomain);
+websiteRouter.route('/:domainId').put(updateSpecificWebsiteDomainDetails)
+                                .get(getSpecificWebsiteAndThereContents)
+                                .delete(deleteWebsiteDomain);
 
 
 export default websiteRouter;
