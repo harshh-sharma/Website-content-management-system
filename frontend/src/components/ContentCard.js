@@ -21,7 +21,7 @@ const Card = ({ title, image, content, contentId, domainId, onEditClick }) => {
   };
 
   return (
-    <div className="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300">
+    <div className="relative bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 w-[400px]">
       {/* Edit Button */}
       <button
         onClick={handleEditClick}

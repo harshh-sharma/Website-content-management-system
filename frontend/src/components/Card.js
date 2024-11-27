@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { deleteWebsite, getAllDomains, updateDomain } from "../store/slices/domainSlice";
+import toast from "react-hot-toast";
 
 const Card = ({ websiteName, domain, domainId }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -50,6 +51,17 @@ const Card = ({ websiteName, domain, domainId }) => {
     await dispatch(getAllDomains());
   };
 
+  const handleCopyId = (e) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(domainId)
+      .then(() => {
+        toast.success("Domain ID copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy ID:", err);
+      });
+  };
+
   return (
     <div
       className="relative bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-300 cursor-pointer h-[200px] w-[300px]"
@@ -84,6 +96,16 @@ const Card = ({ websiteName, domain, domainId }) => {
               <div>
                 <h2 className="text-xl font-bold mb-2 text-indigo-400">{websiteName}</h2>
                 <p className="text-gray-400">{domain}</p>
+                {/* Copy ID Button */}
+                <div className="mt-2 flex items-center gap-2">
+                  {/* <p className="text-gray-400">{domainId}</p> */}
+                  <button
+                    onClick={handleCopyId}
+                    className="bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-600 text-sm"
+                  >
+                    Copy ID
+                  </button>
+                </div>
               </div>
             </div>
           </div>
