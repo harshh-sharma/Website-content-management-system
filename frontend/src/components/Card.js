@@ -99,12 +99,12 @@ const Card = ({ websiteName, domain, domainId }) => {
                 {/* Copy ID Button */}
                 <div className="mt-2 flex items-center gap-2">
                   {/* <p className="text-gray-400">{domainId}</p> */}
-                  <button
+                  {/* <button
                     onClick={handleCopyId}
                     className="bg-gray-700 text-white px-2 py-1 rounded hover:bg-gray-600 text-sm"
                   >
                     Copy ID
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
