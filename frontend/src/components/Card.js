@@ -52,7 +52,7 @@ const Card = ({ websiteName, domain, domainId }) => {
   };
 
   const handleCopyId = (e) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Stop the click event from triggering the Link navigation
     navigator.clipboard.writeText(domainId)
       .then(() => {
         toast.success("Domain ID copied to clipboard!");
